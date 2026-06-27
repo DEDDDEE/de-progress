@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050806">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DE进度">
+  <title>DE进度</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="icon" href="icons/icon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">DE Progress</p>
+        <h1>进度面板</h1>
+      </div>
+      <button class="icon-button" id="addModuleButton" type="button" aria-label="添加模块" title="添加模块">
+        <span aria-hidden="true">+</span>
+      </button>
+    </header>
+
+    <section class="today-strip" aria-label="今日进度">
+      <div>
+        <span class="today-label">今天</span>
+        <strong id="todayText">--</strong>
+      </div>
+      <div class="sync-dot" aria-hidden="true"></div>
+    </section>
+
+    <section class="module-list" id="moduleList" aria-live="polite"></section>
+  </main>
+
+  <dialog class="module-dialog" id="moduleDialog">
+    <form method="dialog" id="moduleForm">
+      <div class="dialog-head">
+        <h2 id="dialogTitle">添加模块</h2>
+        <button class="plain-button" type="button" id="closeDialogButton" aria-label="关闭">×</button>
+      </div>
+
+      <label>
+        <span>名称</span>
+        <input id="titleInput" name="title" maxlength="18" required autocomplete="off">
+      </label>
+
+      <label>
+        <span>图标</span>
+        <input id="iconInput" name="icon" maxlength="4" required autocomplete="off">
+      </label>
+
+      <div class="date-grid">
+        <label>
+          <span>开始日期</span>
+          <input id="startInput" name="start" type="date" required>
+        </label>
+        <label>
+          <span>结束日期</span>
+          <input id="endInput" name="end" type="date" required>
+        </label>
+      </div>
+
+      <fieldset>
+        <legend>颜色</legend>
+        <div class="color-row" id="colorRow"></div>
+      </fieldset>
+
+      <label class="toggle-line">
+        <span>今日呼吸</span>
+        <input id="pulseInput" name="pulse" type="checkbox">
+      </label>
+
+      <menu class="dialog-actions">
+        <button class="danger-button" type="button" id="deleteButton">删除</button>
+        <span></span>
+        <button class="secondary-button" type="button" id="cancelButton">取消</button>
+        <button class="primary-button" value="confirm" type="submit">保存</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <template id="moduleTemplate">
+    <article class="progress-card">
+      <button class="card-edit" type="button" aria-label="编辑模块">
+        <div class="card-head">
+          <div class="title-block">
+            <span class="module-icon"></span>
+            <div>
+              <h2 class="module-title"></h2>
+              <p class="module-range"></p>
+            </div>
+          </div>
+          <div class="ring" aria-hidden="true">
+            <svg viewBox="0 0 44 44">
+              <circle class="ring-track" cx="22" cy="22" r="18"></circle>
+              <circle class="ring-value" cx="22" cy="22" r="18"></circle>
+            </svg>
+            <span class="ring-text"></span>
+          </div>
+        </div>
+        <div class="dot-grid"></div>
+        <div class="card-foot">
+          <span class="day-count"></span>
+          <span class="percent-text"></span>
+        </div>
+      </button>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
