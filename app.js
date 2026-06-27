@@ -91,6 +91,7 @@ const collapsedInput = document.querySelector("#collapsedInput");
 const deleteButton = document.querySelector("#deleteButton");
 const colorRow = document.querySelector("#colorRow");
 const themeSelect = document.querySelector("#themeSelect");
+const modalBackdrop = document.querySelector("#modalBackdrop");
 const taskStats = document.querySelector("#taskStats");
 const statsToggle = document.querySelector("#statsToggle");
 const statsSummary = document.querySelector("#statsSummary");
@@ -138,6 +139,10 @@ document.querySelector("#closeStatDialogButton").addEventListener("click", close
 document.querySelector("#cancelStatButton").addEventListener("click", closeStatEditor);
 statForm.addEventListener("submit", saveStatEntry);
 taskStats.addEventListener("click", handleStatAction);
+modalBackdrop.addEventListener("click", () => {
+  if (!dialog.hidden) closeEditor();
+  if (!statDialog.hidden) closeStatEditor();
+});
 
 setTheme(selectedTheme, false);
 renderColorChoices();
@@ -567,14 +572,22 @@ function closeEditor() {
 
 function openModal(modal, focusTarget) {
   modal.hidden = false;
+  modalBackdrop.hidden = false;
+  document.body.classList.add("modal-open");
   requestAnimationFrame(() => {
-    focusTarget?.focus({ preventScroll: true });
-    focusTarget?.select?.();
+    setTimeout(() => {
+      focusTarget?.focus({ preventScroll: true });
+      focusTarget?.select?.();
+    }, 40);
   });
 }
 
 function closeModal(modal) {
   modal.hidden = true;
+  if (dialog.hidden && statDialog.hidden) {
+    modalBackdrop.hidden = true;
+    document.body.classList.remove("modal-open");
+  }
 }
 
 function saveCurrentModule(event) {
