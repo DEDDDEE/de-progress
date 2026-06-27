@@ -20,15 +20,6 @@ const defaults = [
     end: "2026-03-20",
     color: colors[1],
     pulse: false
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "复仇计划",
-    icon: "⚔️",
-    start: "2025-03-10",
-    end: "2025-09-10",
-    color: colors[2],
-    pulse: true
   }
 ];
 
