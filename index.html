@@ -13,16 +13,35 @@
   <link rel="icon" href="icons/icon.svg">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="theme-universe">
+  <div class="ambient" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
   <main class="app-shell">
     <header class="topbar">
       <div>
         <p class="eyebrow">DE Progress</p>
         <h1>进度面板</h1>
       </div>
-      <button class="icon-button" id="addModuleButton" type="button" aria-label="添加模块" title="添加模块">
-        <span aria-hidden="true">+</span>
-      </button>
+      <div class="header-actions">
+        <label class="theme-picker" aria-label="选择主题" title="选择主题">
+          <span aria-hidden="true">◎</span>
+          <select id="themeSelect">
+            <option value="universe">Universe</option>
+            <option value="love">Love</option>
+            <option value="rainy">Rainy</option>
+            <option value="connect">Connect</option>
+            <option value="wormhole">Wormhole</option>
+            <option value="turbulence">Turbulence</option>
+          </select>
+        </label>
+        <button class="icon-button" id="addModuleButton" type="button" aria-label="添加模块" title="添加模块">
+          <span aria-hidden="true">+</span>
+        </button>
+      </div>
     </header>
 
     <section class="today-strip" aria-label="今日进度">
