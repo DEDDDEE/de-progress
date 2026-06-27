@@ -743,16 +743,19 @@ h1 {
   display: none;
 }
 
-body:has(.module-dialog:not([hidden])) {
-  overflow: hidden;
-}
-
-body:has(.module-dialog:not([hidden]))::before {
-  content: "";
+.modal-backdrop {
   position: fixed;
   inset: 0;
   z-index: 19;
   background: rgba(0,0,0,.62);
+}
+
+.modal-backdrop[hidden] {
+  display: none;
+}
+
+body.modal-open {
+  overflow: hidden;
 }
 
 .dialog-head, .dialog-actions, .toggle-line {
@@ -793,11 +796,16 @@ label span, legend {
 input {
   width: 100%;
   min-height: 42px;
+  position: relative;
+  z-index: 1;
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 9px 11px;
   color: var(--text);
   background: #070b08;
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: manipulation;
 }
 
 .date-grid {
