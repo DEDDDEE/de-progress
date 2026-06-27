@@ -723,15 +723,35 @@ h1 {
 }
 
 .module-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 20;
+  transform: translate(-50%, -50%);
   width: min(calc(100vw - 28px), 460px);
+  max-height: min(86svh, 680px);
+  overflow-y: auto;
   border: 1px solid var(--line);
   border-radius: 8px;
+  padding: 16px;
   color: var(--text);
   background: #101711;
   box-shadow: 0 18px 70px rgba(0,0,0,.55);
 }
 
-.module-dialog::backdrop {
+.module-dialog[hidden] {
+  display: none;
+}
+
+body:has(.module-dialog:not([hidden])) {
+  overflow: hidden;
+}
+
+body:has(.module-dialog:not([hidden]))::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 19;
   background: rgba(0,0,0,.62);
 }
 
