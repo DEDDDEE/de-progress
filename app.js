@@ -647,6 +647,8 @@ function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   if (["127.0.0.1", "localhost"].includes(location.hostname)) return;
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+    navigator.serviceWorker.register("./service-worker.js").then((registration) => {
+      registration.update().catch(() => {});
+    }).catch(() => {});
   });
 }
