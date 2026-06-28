@@ -63,7 +63,7 @@ const defaults = [
     start: "2026-02-24",
     end: "2027-02-24",
     color: "#FFF994",
-    pulse: false,
+    pulse: true,
     collapsed: false
   },
   {
@@ -83,7 +83,7 @@ const defaults = [
     start: "2024-12-20",
     end: "2026-03-20",
     color: colors[1],
-    pulse: false,
+    pulse: true,
     collapsed: true
   }
 ];
@@ -178,6 +178,7 @@ function normalizeModule(module) {
   return {
     ...module,
     title,
+    pulse: true,
     collapsed: typeof module.collapsed === "boolean" ? module.collapsed : title === "New Zealand"
   };
 }
