@@ -7,7 +7,8 @@ const colors = [
   "#ff6d6d",
   "#5ab8ff",
   "#ffd166",
-  "#45d6bd"
+  "#45d6bd",
+  "#FFF994"
 ];
 const themes = ["universe", "love", "rainy", "connect", "wormhole", "turbulence"];
 const today = new Date();
@@ -63,6 +64,16 @@ const defaults = [
     end: `${today.getFullYear() + 1}-01-01`,
     color: colors[0],
     pulse: true,
+    collapsed: true
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "Australia",
+    icon: "🇦🇺",
+    start: "2026-02-24",
+    end: "2027-02-24",
+    color: "#FFF994",
+    pulse: false,
     collapsed: false
   },
   {
@@ -153,7 +164,10 @@ registerServiceWorker();
 function loadModules() {
   try {
     const saved = JSON.parse(localStorage.getItem(storeKey));
-    return Array.isArray(saved) && saved.length ? saved.map(normalizeModule) : defaults;
+    const loaded = Array.isArray(saved) && saved.length ? saved.map(normalizeModule) : defaults;
+    const migrated = migrateDefaultModules(loaded);
+    if (migrated.changed) localStorage.setItem(storeKey, JSON.stringify(migrated.modules));
+    return migrated.modules;
   } catch {
     return defaults;
   }
@@ -166,6 +180,29 @@ function normalizeModule(module) {
     title,
     collapsed: typeof module.collapsed === "boolean" ? module.collapsed : title === "New Zealand"
   };
+}
+
+function migrateDefaultModules(currentModules) {
+  let changed = false;
+  let modules = currentModules.map((module) => {
+    if (module.title !== "年度进度" || module.collapsed === true) return module;
+    changed = true;
+    return { ...module, collapsed: true };
+  });
+
+  if (!modules.some((module) => module.title === "Australia")) {
+    const australia = defaults.find((module) => module.title === "Australia");
+    const annualIndex = modules.findIndex((module) => module.title === "年度进度");
+    const insertIndex = annualIndex >= 0 ? annualIndex + 1 : modules.length;
+    modules = [
+      ...modules.slice(0, insertIndex),
+      { ...australia, id: crypto.randomUUID() },
+      ...modules.slice(insertIndex)
+    ];
+    changed = true;
+  }
+
+  return { modules, changed };
 }
 
 function persist() {
