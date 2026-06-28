@@ -375,30 +375,32 @@ function renderTaskStats() {
 }
 
 function renderPayslipChart(target) {
-  const width = 920;
+  const data = taskData.payslip;
+  const width = Math.max(920, data.length * 76);
   const height = 136;
-  const padding = { top: 18, right: 18, bottom: 24, left: 8 };
+  const padding = { top: 30, right: 28, bottom: 28, left: 34 };
   const usableWidth = width - padding.left - padding.right;
   const usableHeight = height - padding.top - padding.bottom;
-  const data = taskData.payslip;
+  const maxValue = Math.max(target, ...data.map((item) => item.value));
   const spacing = data.length > 1 ? usableWidth / (data.length - 1) : 0;
   const points = data.map((item, index) => {
     const x = padding.left + spacing * index;
-    const y = padding.top + usableHeight - (item.value / target) * usableHeight;
-    return { ...item, label: formatStatDate(item.date), x, y };
+    const y = padding.top + usableHeight - (item.value / maxValue) * usableHeight;
+    const valueY = Math.max(12, y - 10);
+    return { ...item, label: formatStatDate(item.date), x, y, valueY };
   });
   const path = points.map((point, index) => `${index ? "L" : "M"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" ");
-  const targetY = padding.top;
+  const targetY = padding.top + usableHeight - (target / maxValue) * usableHeight;
 
   payslipChart.innerHTML = `
-    <svg viewBox="0 0 ${width} ${height}" role="img">
+    <svg viewBox="0 0 ${width} ${height}" style="width:${width}px" role="img">
       <line x1="${padding.left}" y1="${targetY}" x2="${width - padding.right}" y2="${targetY}" stroke="rgba(255,255,255,.34)" stroke-dasharray="5 5"/>
       <path d="${path}" fill="none" stroke="var(--accent-ui)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
       ${points.map((point, index) => `
         <circle class="${index === 0 ? "latest-point" : ""}" cx="${point.x}" cy="${point.y}" r="${index === 0 ? 6 : 4.5}" fill="var(--accent-ui)"></circle>
-        <text class="chart-value" x="${point.x}" y="${point.y - 9}" text-anchor="middle">${point.value}</text>
+        <text class="chart-value" x="${point.x}" y="${point.valueY}" text-anchor="middle">${point.value}</text>
       `).join("")}
-      ${points.filter((_, index) => index % 2 === 0 || index === points.length - 1).map((point) => `
+      ${points.map((point) => `
         <text class="chart-axis-label" x="${point.x}" y="${height - 6}" text-anchor="middle">${point.label}</text>
       `).join("")}
       <text class="chart-axis-label" x="${width - padding.right}" y="${targetY - 6}" text-anchor="end">目标 ${target}</text>
@@ -492,7 +494,7 @@ function openStatEditor(type) {
   statDateField.hidden = false;
   statDateInput.required = true;
   const labels = {
-    payslip: ["添加集签数据", "累计 payslip 数"],
+    payslip: ["添加集签数据", "累计 Payslip 数"],
     salary: ["添加税后薪资", "税后薪资"],
     hours: ["添加每周工时", "总工时"]
   };
