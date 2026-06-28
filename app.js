@@ -58,16 +58,6 @@ const defaultTaskStats = {
 const defaults = [
   {
     id: crypto.randomUUID(),
-    title: "年度进度",
-    icon: "📅",
-    start: `${today.getFullYear()}-01-01`,
-    end: `${today.getFullYear() + 1}-01-01`,
-    color: colors[0],
-    pulse: true,
-    collapsed: true
-  },
-  {
-    id: crypto.randomUUID(),
     title: "Australia",
     icon: "🇦🇺",
     start: "2026-02-24",
@@ -75,6 +65,16 @@ const defaults = [
     color: "#FFF994",
     pulse: false,
     collapsed: false
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "年度进度",
+    icon: "📅",
+    start: `${today.getFullYear()}-01-01`,
+    end: `${today.getFullYear() + 1}-01-01`,
+    color: colors[0],
+    pulse: true,
+    collapsed: true
   },
   {
     id: crypto.randomUUID(),
@@ -192,13 +192,24 @@ function migrateDefaultModules(currentModules) {
 
   if (!modules.some((module) => module.title === "Australia")) {
     const australia = defaults.find((module) => module.title === "Australia");
-    const annualIndex = modules.findIndex((module) => module.title === "年度进度");
-    const insertIndex = annualIndex >= 0 ? annualIndex + 1 : modules.length;
     modules = [
-      ...modules.slice(0, insertIndex),
       { ...australia, id: crypto.randomUUID() },
-      ...modules.slice(insertIndex)
+      ...modules
     ];
+    changed = true;
+  }
+
+  const preferredOrder = ["Australia", "年度进度", "New Zealand"];
+  const ordered = [...modules].sort((a, b) => {
+    const aIndex = preferredOrder.indexOf(a.title);
+    const bIndex = preferredOrder.indexOf(b.title);
+    if (aIndex === -1 && bIndex === -1) return 0;
+    if (aIndex === -1) return 1;
+    if (bIndex === -1) return -1;
+    return aIndex - bIndex;
+  });
+  if (ordered.some((module, index) => module !== modules[index])) {
+    modules = ordered;
     changed = true;
   }
 
