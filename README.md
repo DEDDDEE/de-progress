@@ -1,10 +1,10 @@
 # DE进度
 
-一个适合 iPhone 主屏幕使用的沉浸式进度面板 PWA，用来记录年度进度、Working Holiday 进度、集签数据、税后薪资和每周工时。
+一个适合 iPhone 主屏幕使用的沉浸式进度面板 PWA，用来记录年度进度、工作进度、任务数据、税后薪资和每周工时。
 
 线上地址：
 
-https://dedddee.github.io/de-progress/
+https://yunbindeng.github.io/de-progress/
 
 ## 功能
 
